@@ -7,7 +7,13 @@ from subprocess import Popen, PIPE
 import shlex
 
 LOGFILE = os.getenv('LOGFILE', default=None)
-KAFKA_SERVER = os.getenv('KAFKA_SERVER', default=None)
+
+try:
+    KAFKA_SERVER: list = ast.literal_eval(os.getenv('KAFKA_SERVER', default=None))
+except:
+    log.error('this is not a valid list %s. Try KAFKA_SERVER="[kafka-a, kafka-b]"', os.getenv('KAFKA_SERVER'))
+    exit(1)
+
 KAFKA_TOPIC = os.getenv('KAFKA_TOPIC', default=None)
 
 if KAFKA_TOPIC == None or KAFKA_SERVER == None:
